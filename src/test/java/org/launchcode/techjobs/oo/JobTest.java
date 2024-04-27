@@ -1,72 +1,77 @@
 package org.launchcode.techjobs.oo;
 
+import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class JobTest {
 
-    // Test the Job constructor sets all fields correctly
+    Job job1, job2, job3;
+
+    @Before
+    public void createJobObjects() {
+        job1 = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
+        job2 = new Job("Web Developer", new Employer("LaunchCode"), new Location("St. Louis"), new PositionType("Front-end developer"), new CoreCompetency("JavaScript"));
+        job3 = new Job("Ice cream tester", new Employer(""), new Location("Home"), new PositionType("UX"), new CoreCompetency("Tasting ability"));
+    }
+
+    @Test
+    public void testSettingJobId() {
+        Job job4 = new Job();
+        Job job5 = new Job();
+        assertNotEquals(job4.getId(), job5.getId());
+    }
+
     @Test
     public void testJobConstructorSetsAllFields() {
-        Job testJob = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
+        assertTrue(job1.getEmployer() instanceof Employer);
+        assertTrue(job1.getLocation() instanceof Location);
+        assertTrue(job1.getPositionType() instanceof PositionType);
+        assertTrue(job1.getCoreCompetency() instanceof CoreCompetency);
 
-        assertTrue(testJob.getName() instanceof String);
-        assertTrue(testJob.getEmployer() instanceof Employer);
-        assertTrue(testJob.getLocation() instanceof Location);
-        assertTrue(testJob.getPositionType() instanceof PositionType);
-        assertTrue(testJob.getCoreCompetency() instanceof CoreCompetency);
-
-        assertEquals("Product tester", testJob.getName());
-        assertEquals("ACME", testJob.getEmployer().getValue());
-        assertEquals("Desert", testJob.getLocation().getValue());
-        assertEquals("Quality control", testJob.getPositionType().getValue());
-        assertEquals("Persistence", testJob.getCoreCompetency().getValue());
+        assertEquals("Product tester", job1.getName());
+        assertEquals("ACME", job1.getEmployer().getValue());
+        assertEquals("Desert", job1.getLocation().getValue());
+        assertEquals("Quality control", job1.getPositionType().getValue());
+        assertEquals("Persistence", job1.getCoreCompetency().getValue());
     }
 
-    // Test to ensure two Job objects with identical fields except for id are not considered equal
     @Test
     public void testJobsForEquality() {
-        Job job1 = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
-        Job job2 = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
-        assertFalse(job1.equals(job2));
+        Job job6 = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
+        Job job7 = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
+        assertFalse(job6.equals(job7));
     }
 
-    // Test that toString starts and ends with a new line
     @Test
     public void testToStringStartsAndEndsWithNewLine() {
-        Job job = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
-        String output = job.toString();
-        assertEquals('\n', output.charAt(0));
-        assertEquals('\n', output.charAt(output.length() - 1));
+        char firstChar = job1.toString().charAt(0);
+        char lastChar = job1.toString().charAt(job1.toString().length() - 1);
+        assertEquals('\n', firstChar);
+        assertEquals('\n', lastChar);
     }
 
-    // Test that toString contains correct labels and data
     @Test
     public void testToStringContainsCorrectLabelsAndData() {
-        Job job = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
         String expected = "\n" +
-                "ID: " + job.getId() + "\n" +
+                "ID: " + job1.getId() + "\n" +
                 "Name: Product tester" + "\n" +
                 "Employer: ACME" + "\n" +
                 "Location: Desert" + "\n" +
                 "Position Type: Quality control" + "\n" +
                 "Core Competency: Persistence" + "\n";
-        assertEquals(expected, job.toString());
+        assertEquals(expected, job1.toString());
     }
 
-    // Test that toString handles empty fields by providing a default message
     @Test
     public void testToStringHandlesEmptyField() {
-        Job job = new Job("", new Employer(""), new Location(""), new PositionType(""), new CoreCompetency(""));
         String expected = "\n" +
-                "ID: " + job.getId() + "\n" +
-                "Name: Data not available" + "\n" +
+                "ID: " + job3.getId() + "\n" +
+                "Name: Ice cream tester" + "\n" +
                 "Employer: Data not available" + "\n" +
-                "Location: Data not available" + "\n" +
-                "Position Type: Data not available" + "\n" +
-                "Core Competency: Data not available" + "\n";
-        assertEquals(expected, job.toString());
+                "Location: Home" + "\n" +
+                "Position Type: UX" + "\n" +
+                "Core Competency: Tasting ability" + "\n";
+        assertEquals(expected, job3.toString());
     }
 }
